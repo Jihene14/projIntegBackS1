@@ -24,7 +24,10 @@ export default class Employe extends Model {
   @Column({ type: DataType.STRING, defaultValue: "departement" })
   departement!: string;
 
-  @HasMany(() => CalendrierEmp)
+  @Column({defaultValue: 8})
+  heureTravail!: number;
+
+  @HasMany(() => CalendrierEmp )
   calendrier!: CalendrierEmp[];
 
   @Column({ type: DataType.STRING, defaultValue: "employe" })

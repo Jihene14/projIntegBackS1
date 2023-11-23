@@ -14,34 +14,53 @@ export const EmployeController = {
     res.send(user);
   },
   login: async (req: Request, res: Response, next: NextFunction) => {
-    const {
-      params: { email, password },
-    } = req;
+    try{
+      const {
+        body: { email, password },
+      } = req;
     console.log({ email, password });
     const user = await EmployeService.login(email, password);
+    console.log(password);
+    console.log(email);
+    console.log(user?.calendrier);
+    
+    
     if (user === null) {
-      res.status(400).json({ message: "Error" });
+      res.status(405).json({ message: "mail or password bad" });
+
     } else {
-      const token = sign({ id: user.id }, jwtKey);
+      const token = sign({ user: user }, jwtKey);
 
-      res.json({ message: "Logged in successfully", token });
+      res.json({ message: "Logged in successfully", token,user });
+    }}
+    catch(e){
+      console.log(e);
+    res.send(e);
     }
   },
+  
   register: async (req: Request, res: Response, next: NextFunction) => {
-    const {
-      body: { email, password },
-    } = req;
-    const user = await EmployeService.register(email, password);
-    if (user !== null) {
-      const token = sign({ id: user.id }, jwtKey);
+    try {
+      const {
+        body: { email, password, nom, prenom, poste, adresse, departement, role },
+      } = req;
+      const user = await EmployeService.register(email, password, nom, prenom, poste, adresse, departement, role);
+      if (user !== null) {
+        const token = sign({ id: user.id }, jwtKey);
 
-      res.json({ message: "Logged in successfully", token });
+        res.status(200).send({ message: "registered in successfully", token });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(400).json({ message: "bel7a9 Error" });
+
     }
-    res.status(400).json({ message: "Error" });
   },
+
   profile: async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as number;
     const profile = await EmployeService.getOne(user);
     res.json(profile);
   },
+
 };

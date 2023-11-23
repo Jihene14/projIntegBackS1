@@ -29,30 +29,106 @@ const CalandrierEmpService = {
   getOne: (id: number) => {
     return CalandrierEmp.findByPk(id);
   },
+  getOneByDate:async(id: number)=>{
+    let now = new Date()
+    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+    console.log(todayCalendar);
 
-  AjouterHeureArriv: async (id: number, heureArriv: Date) => {
-    const todayCalendar = await getEmployeCalendarFromDate(id);
-    if (todayCalendar) {
-      todayCalendar.heureArriv = heureArriv;
-      todayCalendar.save();
+    if (todayCalendar.length != 0) {
+
+      for (let i = 0; i < todayCalendar.length; i++) {
+        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
+          todayCalendar[i].heureArriv = new Date()
+          await todayCalendar[i].save();
+          return todayCalendar[i]
+        }
+        
+      }
+      let newDate= new CalandrierEmp()
+      newDate.jour=new Date()
+      newDate.employeId= id
+      await newDate.save();
+      return newDate
     }
+    let newDate= new CalandrierEmp()
+     newDate.jour=new Date()
+     newDate.employeId= id
+     await newDate.save();
+     return newDate
+  },
+  AjouterHeureArriv: async (id: number, heureArriv: Date) => {
+    let now = new Date()
+    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+    console.log(todayCalendar);
+
+    if (todayCalendar.length != 0) {
+
+      for (let i = 0; i < todayCalendar.length; i++) {
+        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
+          todayCalendar[i].heureArriv = new Date()
+          await todayCalendar[i].save();
+          return todayCalendar[i]
+        } else {
+          let calToday = new CalandrierEmp()
+          calToday.jour = new Date();
+          calToday.heureArriv = new Date();
+          calToday.employeId = id
+          await calToday.save()
+          return calToday
+        }
+
+      }
+    }
+    else {
+      let calToday = new CalandrierEmp()
+      calToday.jour = new Date();
+      calToday.heureArriv = new Date();
+      calToday.employeId = id
+      await calToday.save()
+      return calToday
+    }
+
   },
 
   AjouterHeureDep: async (id: number, heureDep: Date) => {
-    const todayCalendar = await getEmployeCalendarFromDate(id);
-    if (todayCalendar) {
-      todayCalendar.heureDep = heureDep;
-      todayCalendar.save();
+    let now = new Date()
+    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+    console.log(todayCalendar);
+
+    if (todayCalendar.length != 0) {
+
+      for (let i = 0; i < todayCalendar.length; i++) {
+        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
+          todayCalendar[i].heureDep = new Date()
+          console.log(todayCalendar[i].heureDep.getTime());
+          
+          console.log(((todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000);
+          if(( (todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000 > 8 ){
+
+            todayCalendar[i].heureSup = Math.round(( (todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000 - 8)
+            
+            
+          }
+          else{
+            todayCalendar[i].heureSup=0
+            
+          }
+         
+          await todayCalendar[i].save();
+          return todayCalendar[i]
+        } else {
+          return null
+        }
+      }
     }
+    else {
+      return null
+    }
+
   },
 
-  ModifierHeureSup: async (id: number, heureSup: number) => {
-    const todayCalendar = await getEmployeCalendarFromDate(id);
-    if (todayCalendar) {
-      todayCalendar.heureSup = heureSup;
-      todayCalendar.save();
-    }
-  },
+
+ 
 
   ModifierHeureCong: async (id: number, heureConge: number) => {
     const todayCalendar = await getEmployeCalendarFromDate(id);

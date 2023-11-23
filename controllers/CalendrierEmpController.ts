@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import CalendrierEmpService from "../services/CalendrierEmpService";
+import EmployeService from "../services/EmployeService";
 
 export const CalandrierEmpController = {
-  getAll: (_req: Request, res: Response, _next: NextFunction) => {
-    const calandsEmps = CalendrierEmpService.getAll();
+  getAll: async (_req: Request, res: Response, _next: NextFunction) => {
+    const calandsEmps = await CalendrierEmpService.getAll();
     res.send(calandsEmps);
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
@@ -36,15 +37,7 @@ export const CalandrierEmpController = {
     );
     res.send(employeeCalendar);
   },
-  ModifierHeureSup: async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const { heureSup } = req.body;
-    const employeeCalendar = await CalendrierEmpService.ModifierHeureSup(
-      parseInt(id),
-      heureSup
-    );
-    res.send(employeeCalendar);
-  },
+
   ModifierHeureCong: async (
     req: Request,
     res: Response,
@@ -58,6 +51,16 @@ export const CalandrierEmpController = {
     );
     res.send(employeeCalendar);
   },
+
+  getCalendarByTimeandId: async (req: Request,
+    res: Response,
+    next: NextFunction) => {
+      const employeeCalendar = await CalendrierEmpService.getOneByDate(parseInt(req.params.id))
+      res.send(employeeCalendar)
+
+  },
+
+
   Suivreperformance: async (
     req: Request,
     res: Response,

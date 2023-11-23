@@ -4,12 +4,25 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import sequelize from "./database";
 import passport from "passport";
+import cors from "cors";
 
 import { initPassport } from "./auth/passport";
 import employeeRouter from "./routes/employe";
 import calendarRouter from "./routes/calendrieremp";
 
 var app = express();
+const corsOpts = {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  };
+  const allowedOrigins = ['http://localhost:4200'];
+  
+  const options: cors.CorsOptions = {
+    origin: allowedOrigins
+  };
+  app.use(cors(options));
+
 initPassport(passport);
 
 app.use(logger("dev"));

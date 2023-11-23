@@ -4,7 +4,7 @@ const sequelize = new Sequelize({
   database: 'rhmangement',
   dialect: 'mysql',
   username: 'root',
-  password: 'rania',
+  password: '',
   models: [__dirname + '/models'],
 });
 
