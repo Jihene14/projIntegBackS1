@@ -29,106 +29,121 @@ const CalandrierEmpService = {
   getOne: (id: number) => {
     return CalandrierEmp.findByPk(id);
   },
-  getOneByDate:async(id: number)=>{
-    let now = new Date()
-    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+  getOneByDate: async (id: number) => {
+    let now = new Date();
+    let todayCalendar = await CalandrierEmp.findAll({
+      where: { employeId: id },
+    });
     console.log(todayCalendar);
 
     if (todayCalendar.length != 0) {
-
       for (let i = 0; i < todayCalendar.length; i++) {
-        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
-          todayCalendar[i].heureArriv = new Date()
+        if (
+          todayCalendar[i].jour.getDate() == now.getDate() &&
+          todayCalendar[i].jour.getMonth() == now.getMonth() &&
+          todayCalendar[i].jour.getFullYear() == now.getFullYear()
+        ) {
+          todayCalendar[i].heureArriv = new Date();
           await todayCalendar[i].save();
-          return todayCalendar[i]
+          return todayCalendar[i];
         }
-        
       }
-      let newDate= new CalandrierEmp()
-      newDate.jour=new Date()
-      newDate.employeId= id
+      let newDate = new CalandrierEmp();
+      newDate.jour = new Date();
+      newDate.employeId = id;
       await newDate.save();
-      return newDate
+      return newDate;
     }
-    let newDate= new CalandrierEmp()
-     newDate.jour=new Date()
-     newDate.employeId= id
-     await newDate.save();
-     return newDate
+    let newDate = new CalandrierEmp();
+    newDate.jour = new Date();
+    newDate.employeId = id;
+    await newDate.save();
+    return newDate;
   },
   AjouterHeureArriv: async (id: number, heureArriv: Date) => {
-    let now = new Date()
-    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+    let now = new Date();
+    let todayCalendar = await CalandrierEmp.findAll({
+      where: { employeId: id },
+    });
     console.log(todayCalendar);
 
     if (todayCalendar.length != 0) {
-
       for (let i = 0; i < todayCalendar.length; i++) {
-        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
-          todayCalendar[i].heureArriv = new Date()
+        if (
+          todayCalendar[i].jour.getDate() == now.getDate() &&
+          todayCalendar[i].jour.getMonth() == now.getMonth() &&
+          todayCalendar[i].jour.getFullYear() == now.getFullYear()
+        ) {
+          todayCalendar[i].heureArriv = new Date();
           await todayCalendar[i].save();
-          return todayCalendar[i]
+          return todayCalendar[i];
         } else {
-          let calToday = new CalandrierEmp()
+          let calToday = new CalandrierEmp();
           calToday.jour = new Date();
           calToday.heureArriv = new Date();
-          calToday.employeId = id
-          await calToday.save()
-          return calToday
+          calToday.employeId = id;
+          await calToday.save();
+          return calToday;
         }
-
       }
-    }
-    else {
-      let calToday = new CalandrierEmp()
+    } else {
+      let calToday = new CalandrierEmp();
       calToday.jour = new Date();
       calToday.heureArriv = new Date();
-      calToday.employeId = id
-      await calToday.save()
-      return calToday
+      calToday.employeId = id;
+      await calToday.save();
+      return calToday;
     }
-
   },
 
   AjouterHeureDep: async (id: number, heureDep: Date) => {
-    let now = new Date()
-    let todayCalendar = await CalandrierEmp.findAll({ where: { employeId: id } })
+    let now = new Date();
+    let todayCalendar = await CalandrierEmp.findAll({
+      where: { employeId: id },
+    });
     console.log(todayCalendar);
 
     if (todayCalendar.length != 0) {
-
       for (let i = 0; i < todayCalendar.length; i++) {
-        if ((todayCalendar[i].jour.getDate() == now.getDate()) && (todayCalendar[i].jour.getMonth() == now.getMonth()) && (todayCalendar[i].jour.getFullYear() == now.getFullYear())) {
-          todayCalendar[i].heureDep = new Date()
+        if (
+          todayCalendar[i].jour.getDate() == now.getDate() &&
+          todayCalendar[i].jour.getMonth() == now.getMonth() &&
+          todayCalendar[i].jour.getFullYear() == now.getFullYear()
+        ) {
+          todayCalendar[i].heureDep = new Date();
           console.log(todayCalendar[i].heureDep.getTime());
-          
-          console.log(((todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000);
-          if(( (todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000 > 8 ){
 
-            todayCalendar[i].heureSup = Math.round(( (todayCalendar[i].heureDep).getTime() - (todayCalendar[i].heureArriv).getTime() )/3600000 - 8)
-            
-            
+          console.log(
+            (todayCalendar[i].heureDep.getTime() -
+              todayCalendar[i].heureArriv.getTime()) /
+              3600000
+          );
+          if (
+            (todayCalendar[i].heureDep.getTime() -
+              todayCalendar[i].heureArriv.getTime()) /
+              3600000 >
+            8
+          ) {
+            todayCalendar[i].heureSup = Math.round(
+              (todayCalendar[i].heureDep.getTime() -
+                todayCalendar[i].heureArriv.getTime()) /
+                3600000 -
+                8
+            );
+          } else {
+            todayCalendar[i].heureSup = 0;
           }
-          else{
-            todayCalendar[i].heureSup=0
-            
-          }
-         
+
           await todayCalendar[i].save();
-          return todayCalendar[i]
-        } else {
-          return null
+          return todayCalendar[i];
         }
       }
-    }
-    else {
-      return null
-    }
+    } else {
+      console.log("out2");
 
+      return null;
+    }
   },
-
-
- 
 
   ModifierHeureCong: async (id: number, heureConge: number) => {
     const todayCalendar = await getEmployeCalendarFromDate(id);
