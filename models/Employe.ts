@@ -1,5 +1,6 @@
 import { Table, Column, Model, HasMany, DataType } from "sequelize-typescript";
 import CalendrierEmp from "./CalendrierEmp";
+import Comment from "./Comments";
 
 @Table({})
 export default class Employe extends Model {
@@ -36,4 +37,7 @@ export default class Employe extends Model {
 
   @Column({ type: DataType.STRING, defaultValue: "employe" })
   role!: "employe" | "rh";
+
+  @HasMany(() => Comment)
+  comments!: Comment[];
 }

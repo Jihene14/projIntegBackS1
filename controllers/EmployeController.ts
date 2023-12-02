@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { sign } from "jsonwebtoken";
 import EmployeService from "../services/EmployeService";
+import DemissionService from "../services/DemissionService";
 import jwtKey from "../auth/constant";
 import Employe from "../models/Employe";
 export const EmployeController = {
@@ -23,30 +24,24 @@ export const EmployeController = {
       user.adresse = adresse;
       user.departement = departement;
       user.role = role;
-     await  user.save()
-      res.send(user)
-    }
-    else
-    {
+      await user.save();
+      res.send(user);
+    } else {
       res.status(404).json({ message: "user not find" });
     }
-    
   },
-  deleteOne : async (req: Request, res: Response, next: NextFunction) => {
+  deleteOne: async (req: Request, res: Response, next: NextFunction) => {
     const { params } = req;
     const {
       body: { email, nom, prenom, poste, adresse, departement, role },
     } = req;
     let user = await EmployeService.getOne(parseInt(params.id));
     if (user) {
-     await user.destroy()
-     res.status(200).json({ message: "deleted" });
-    }
-    else
-    {
+      await user.destroy();
+      res.status(200).json({ message: "deleted" });
+    } else {
       res.status(404).json({ message: "user not find" });
     }
-    
   },
 
   getOne: async (req: Request, res: Response, next: NextFunction) => {
@@ -83,7 +78,7 @@ export const EmployeController = {
       const {
         body: {
           email,
-          
+
           nom,
           prenom,
           poste,
@@ -92,7 +87,7 @@ export const EmployeController = {
           role,
         },
       } = req;
-      const password = email.substr(0,3)+poste;
+      const password = email.substr(0, 3) + poste;
       const user = await EmployeService.register(
         email,
         password,
@@ -118,5 +113,73 @@ export const EmployeController = {
     const user = req.user as number;
     const profile = await EmployeService.getOne(user);
     res.json(profile);
+  },
+  getCommentsByEmployeeId: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { employeeId } = req.params;
+      const comments = await EmployeService.getCommentsByEmployeeId(
+        parseInt(employeeId)
+      );
+      res.status(200).json(comments);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Ajouter une méthode pour créer un commentaire pour un employé
+  createComment: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { employeeId } = req.params;
+      const { content } = req.body;
+      const newComment = await EmployeService.createComment(
+        parseInt(employeeId),
+        content
+      );
+      res
+        .status(201)
+        .json({ message: "Comment created successfully", data: newComment });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getDemissionsByEmployeeId: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { employeeId } = req.params;
+      const demissions = await DemissionService.getDemissionsByEmployeeId(
+        parseInt(employeeId)
+      );
+      res.status(200).json(demissions);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // Add a method to create a demission for an employee
+  createDemission: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { employeeId } = req.params;
+      const { reason } = req.body;
+      const newDemission = await DemissionService.createDemission(
+        parseInt(employeeId),
+        reason
+      );
+      res
+        .status(201)
+        .json({
+          message: "Demission submitted successfully",
+          data: newDemission,
+        });
+    } catch (error) {
+      next(error);
+    }
   },
 };

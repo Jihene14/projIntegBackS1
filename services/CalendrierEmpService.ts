@@ -101,7 +101,7 @@ const CalandrierEmpService = {
     let todayCalendar = await CalandrierEmp.findAll({
       where: { employeId: id },
     });
-    console.log(todayCalendar);
+    // console.log(todayCalendar);
 
     if (todayCalendar.length != 0) {
       for (let i = 0; i < todayCalendar.length; i++) {
@@ -112,6 +112,7 @@ const CalandrierEmpService = {
         ) {
           todayCalendar[i].heureDep = new Date();
           console.log(todayCalendar[i].heureDep.getTime());
+          console.log(todayCalendar[i]);
 
           console.log(
             (todayCalendar[i].heureDep.getTime() -
