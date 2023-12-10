@@ -23,5 +23,18 @@ router.get(
   "/:employeeId/demissions",
   EmployeController.getDemissionsByEmployeeId
 );
+//router.get("/demissions", EmployeController.getAllDemission);
 router.post("/:employeeId/demissions", EmployeController.createDemission);
+router.post(
+  "/:employeeId/demissions/:demissionId/approve",
+  EmployeController.approveDemission
+);
+router.post(
+  "/:employeeId/demissions/:demissionId/reject",
+  EmployeController.rejectDemission
+);
+
+//avantage employee
+
+router.get("/:employeeId/Avantage", EmployeController.getAvantageEmp);
 export default router;

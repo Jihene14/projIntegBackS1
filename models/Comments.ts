@@ -7,7 +7,7 @@ export default class Comment extends Model {
   @Column
   employeeId!: number;
 
-  @BelongsTo(() => Employe)
+  @BelongsTo(() => Employe,{ onDelete: 'CASCADE' })
   employee!: Employe;
 
   @Column(DataType.TEXT)

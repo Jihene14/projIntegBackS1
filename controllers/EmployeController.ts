@@ -4,6 +4,10 @@ import EmployeService from "../services/EmployeService";
 import DemissionService from "../services/DemissionService";
 import jwtKey from "../auth/constant";
 import Employe from "../models/Employe";
+import Demission from "../models/Demission";
+
+
+
 export const EmployeController = {
   getAll: async (_req: Request, res: Response, _next: NextFunction) => {
     const Employes = await EmployeService.getAll();
@@ -162,6 +166,23 @@ export const EmployeController = {
       next(error);
     }
   },
+  getAllDemission: async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const demissions = await DemissionService.getAllDemission();
+      res.status(200).json(demissions);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+
+  /*getAllDemissions: async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const demissions = await EmployeService.getAllDemissions();
+      res.json(demissions);
+    } catch (error) {
+      next(error);
+    }
+  },*/
 
   // Add a method to create a demission for an employee
   createDemission: async (req: Request, res: Response, next: NextFunction) => {
@@ -182,4 +203,34 @@ export const EmployeController = {
       next(error);
     }
   },
+  approveDemission: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { demissionId } = req.params;
+      const approvedDemission = await DemissionService.approveDemission(parseInt(demissionId));
+      res.status(200).json({ message: 'Demission request approved successfully', data: approvedDemission });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  rejectDemission: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { demissionId } = req.params;
+      const rejectedDemission = await DemissionService.rejectDemission(parseInt(demissionId));
+      res.status(200).json({ message: 'Demission request rejected successfully', data: rejectedDemission });
+
+    } catch (error) {
+      next(error);
+    }
+  },
+  getAvantageEmp: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { employeeId } = req.params;
+      const employee = await EmployeService.getAvantageEmp(parseInt(employeeId));
+      res.status(200).json({ data: employee });
+    } catch (error) {
+      next(error);
+    }
+  },
+
 };

@@ -1,4 +1,7 @@
+import DemandeConge from "../models/DemandeConge";
 import LeaveRequest from "../models/DemandeConge";
+
+
 
 const DemandeCongeService = {
   createLeaveRequest: async (employeeId: number, data: any) => {
@@ -37,6 +40,8 @@ const DemandeCongeService = {
       if (leaveRequest) {
         leaveRequest.status = 'approved';
         await leaveRequest.save();
+       
+
       }
     } catch (error) {
       throw error;
@@ -49,6 +54,8 @@ const DemandeCongeService = {
       if (leaveRequest) {
         leaveRequest.status = 'rejected';
         await leaveRequest.save();
+        
+
       }
     } catch (error) {
       throw error;

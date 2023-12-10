@@ -1,4 +1,7 @@
+import AvantageEmp from "../models/AvantageEmp";
+import AventageEmp from "../models/AvantageEmp";
 import CalendrierEmp from "../models/CalendrierEmp";
+import Demission from "../models/Demission";
 import Employe from "../models/Employe";
 import CommentService from "./CommentService";
 import bcrypt from "bcryptjs";
@@ -61,6 +64,19 @@ const EmployeService = {
       throw error;
     }
   },
+  getAvantageEmp :async(employeeId:number)=>{
+    try {
+      const employee = await Employe.findOne({
+        where: { id: employeeId },
+        include: AvantageEmp,
+      });
+      return employee;
+    } catch (error) {
+      throw error;
+    }
+  },
+  
+  
 };
 
 export default EmployeService;
