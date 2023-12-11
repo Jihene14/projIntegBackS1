@@ -25,6 +25,6 @@ export default class CalendrierEmp extends Model {
   @Column
   employeId!: number;
 
-  @BelongsTo(() => Employe)
+  @BelongsTo(() => Employe,{ onDelete: 'CASCADE' })
   employe!: Employe;
 }

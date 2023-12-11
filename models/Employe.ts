@@ -1,6 +1,7 @@
-import { Table, Column, Model, HasMany, DataType } from "sequelize-typescript";
+import { Table, Column, Model, HasMany, DataType,HasOne } from "sequelize-typescript";
 import CalendrierEmp from "./CalendrierEmp";
-
+import Comment from "./Comments";
+import AvantageEmp from "./AvantageEmp"
 @Table({})
 export default class Employe extends Model {
   @Column(DataType.STRING)
@@ -36,4 +37,10 @@ export default class Employe extends Model {
 
   @Column({ type: DataType.STRING, defaultValue: "employe" })
   role!: "employe" | "rh";
+
+  @HasMany(() => Comment,{ onDelete: 'CASCADE' })
+  comments!: Comment[];
+
+  @HasOne(()=>AvantageEmp)
+  AvantageEmp!:AvantageEmp;
 }
