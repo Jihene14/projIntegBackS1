@@ -168,6 +168,24 @@ const CalandrierEmpService = {
       calendarEntry.heureConge;
     return performance;
   },
+  // [{date: 11/12/2023, heureDépart: 09h}]
+
+  getEmployeeWeekWork: async (employeId: number) => {
+    const today = new Date();
+    const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
+    const lastDay = new Date(
+      today.setDate(today.getDate() - today.getDay() + 6)
+    );
+    console.log({ firstDay, lastDay });
+    return CalandrierEmp.findAll({
+      where: {
+        employeId,
+        jour: {
+          [Op.between]: [firstDay.toISOString(), lastDay.toISOString()],
+        },
+      },
+    });
+  },
 };
 
 export default CalandrierEmpService;

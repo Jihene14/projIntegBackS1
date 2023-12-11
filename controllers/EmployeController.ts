@@ -6,8 +6,6 @@ import jwtKey from "../auth/constant";
 import Employe from "../models/Employe";
 import Demission from "../models/Demission";
 
-
-
 export const EmployeController = {
   getAll: async (_req: Request, res: Response, _next: NextFunction) => {
     const Employes = await EmployeService.getAll();
@@ -82,7 +80,7 @@ export const EmployeController = {
       const {
         body: {
           email,
-
+          password,
           nom,
           prenom,
           poste,
@@ -91,7 +89,6 @@ export const EmployeController = {
           role,
         },
       } = req;
-      const password = email.substr(0, 3) + poste;
       const user = await EmployeService.register(
         email,
         password,
@@ -193,12 +190,10 @@ export const EmployeController = {
         parseInt(employeeId),
         reason
       );
-      res
-        .status(201)
-        .json({
-          message: "Demission submitted successfully",
-          data: newDemission,
-        });
+      res.status(201).json({
+        message: "Demission submitted successfully",
+        data: newDemission,
+      });
     } catch (error) {
       next(error);
     }
@@ -206,8 +201,15 @@ export const EmployeController = {
   approveDemission: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { demissionId } = req.params;
-      const approvedDemission = await DemissionService.approveDemission(parseInt(demissionId));
-      res.status(200).json({ message: 'Demission request approved successfully', data: approvedDemission });
+      const approvedDemission = await DemissionService.approveDemission(
+        parseInt(demissionId)
+      );
+      res
+        .status(200)
+        .json({
+          message: "Demission request approved successfully",
+          data: approvedDemission,
+        });
     } catch (error) {
       next(error);
     }
@@ -216,9 +218,15 @@ export const EmployeController = {
   rejectDemission: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { demissionId } = req.params;
-      const rejectedDemission = await DemissionService.rejectDemission(parseInt(demissionId));
-      res.status(200).json({ message: 'Demission request rejected successfully', data: rejectedDemission });
-
+      const rejectedDemission = await DemissionService.rejectDemission(
+        parseInt(demissionId)
+      );
+      res
+        .status(200)
+        .json({
+          message: "Demission request rejected successfully",
+          data: rejectedDemission,
+        });
     } catch (error) {
       next(error);
     }
@@ -226,11 +234,12 @@ export const EmployeController = {
   getAvantageEmp: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { employeeId } = req.params;
-      const employee = await EmployeService.getAvantageEmp(parseInt(employeeId));
+      const employee = await EmployeService.getAvantageEmp(
+        parseInt(employeeId)
+      );
       res.status(200).json({ data: employee });
     } catch (error) {
       next(error);
     }
   },
-
 };

@@ -17,7 +17,7 @@ const EmployeService = {
     const user = await Employe.findOne({
       where: { email: email },
     });
-    console.log(user);
+    console.log({ email, password });
 
     if (user === null) {
       return null;
@@ -40,6 +40,7 @@ const EmployeService = {
     const createdAt = new Date();
     const updatedAt = new Date();
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log({ password });
     const employe = await Employe.create({
       email,
       nom,
@@ -52,6 +53,7 @@ const EmployeService = {
       createdAt,
       updatedAt,
     });
+    console.log({ employe });
     return employe;
   },
   getCommentsByEmployeeId: (employeeId: number) =>
@@ -64,7 +66,7 @@ const EmployeService = {
       throw error;
     }
   },
-  getAvantageEmp :async(employeeId:number)=>{
+  getAvantageEmp: async (employeeId: number) => {
     try {
       const employee = await Employe.findOne({
         where: { id: employeeId },
@@ -75,8 +77,6 @@ const EmployeService = {
       throw error;
     }
   },
-  
-  
 };
 
 export default EmployeService;

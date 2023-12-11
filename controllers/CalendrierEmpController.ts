@@ -52,14 +52,16 @@ export const CalandrierEmpController = {
     res.send(employeeCalendar);
   },
 
-  getCalendarByTimeandId: async (req: Request,
+  getCalendarByTimeandId: async (
+    req: Request,
     res: Response,
-    next: NextFunction) => {
-      const employeeCalendar = await CalendrierEmpService.getOneByDate(parseInt(req.params.id))
-      res.send(employeeCalendar)
-
+    next: NextFunction
+  ) => {
+    const employeeCalendar = await CalendrierEmpService.getOneByDate(
+      parseInt(req.params.id)
+    );
+    res.send(employeeCalendar);
   },
-
 
   Suivreperformance: async (
     req: Request,
@@ -68,14 +70,26 @@ export const CalandrierEmpController = {
   ) => {
     const { id } = req.params;
     const { dateString } = req.query;
-    if (typeof dateString !== 'string' || id === undefined) {
-      res.sendStatus(400)
+    if (typeof dateString !== "string" || id === undefined) {
+      res.sendStatus(400);
       return;
     }
     const date = new Date(dateString);
     const performance = await CalendrierEmpService.Suivreperformance(
       parseInt(id),
       date
+    );
+    res.json(performance);
+  },
+
+  getEmployeeWeekWork: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { id } = req.params;
+    const performance = await CalendrierEmpService.getEmployeeWeekWork(
+      parseInt(id)
     );
     res.json(performance);
   },
